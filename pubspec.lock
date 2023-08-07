@@ -41,6 +41,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.17.1"
+  contact_picker_platform_interface:
+    dependency: transitive
+    description:
+      name: contact_picker_platform_interface
+      sha256: "40847ffa0f6e6755c0047e8ef35c4b622a2b053f41ef175d22c19f03984a9ed1"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.7.0"
+  contact_picker_web:
+    dependency: transitive
+    description:
+      name: contact_picker_web
+      sha256: "13e739a6ce8f3286e441028dec5967b90fd2d5ceaec53045ae054b030877fe31"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.7.0"
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -62,14 +78,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_contacts:
-    dependency: "direct main"
-    description:
-      name: flutter_contacts
-      sha256: "4fb4910fbe401ff234bc672304ef37f90319144920e940d1349b96fe089c6da7"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.7+1"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -83,6 +91,19 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_web_plugins:
+    dependency: transitive
+    description: flutter
+    source: sdk
+    version: "0.0.0"
+  fluttercontactpicker:
+    dependency: "direct main"
+    description:
+      name: fluttercontactpicker
+      sha256: cddd2ba4631f97927adb59c53a529ee8f965e8685eded66a6d5988347aef6ec4
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.7.0"
   js:
     dependency: transitive
     description:
@@ -242,4 +263,4 @@ packages:
     version: "2.1.4"
 sdks:
   dart: ">=3.0.5 <4.0.0"
-  flutter: ">=2.8.0"
+  flutter: ">=3.0.0"

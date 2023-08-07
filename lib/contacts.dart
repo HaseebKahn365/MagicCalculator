@@ -1,7 +1,7 @@
-// ignore_for_file: sort_child_properties_last
+// ignore_for_file: prefer_const_constructors, sort_child_properties_last
 
 import 'package:flutter/material.dart';
-import 'package:flutter_contacts/flutter_contacts.dart';
+import 'package:fluttercontactpicker/fluttercontactpicker.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 var secreteNum;
@@ -14,7 +14,7 @@ class ContactScreen extends StatefulWidget {
 }
 
 class _ContactScreenState extends State<ContactScreen> {
-  List<Contact> contacts = [];
+  List<PhoneContact> contacts = [];
   bool isLoading = true;
 
   @override
@@ -32,10 +32,21 @@ class _ContactScreenState extends State<ContactScreen> {
   }
 
   void fetchContacts() async {
-    contacts = await FlutterContacts.getContacts();
+    final result = await FlutterContactPicker.pickPhoneContact();
+    if (result != null) {
+      contacts = [result];
+    }
     setState(() {
       isLoading = false;
     });
+  }
+
+  String _getPhoneNumber(PhoneContact contact) {
+    if (contact.phoneNumber != null) {
+      return contact.phoneNumber!.number.toString();
+    } else {
+      return '(none)';
+    }
   }
 
   @override
@@ -52,7 +63,15 @@ class _ContactScreenState extends State<ContactScreen> {
                 return GestureDetector(
                   onLongPress: () {
                     setState(() {
-                      secreteNum = contact.phones.first;
+                      secreteNum = contact.phoneNumber!.number;
+                      //show success snackbar
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          duration: Duration(seconds: 1),
+                          content: Text('Contact selected!'),
+                          backgroundColor: Colors.green,
+                        ),
+                      );
                     });
                   },
                   child: Container(
@@ -60,11 +79,11 @@ class _ContactScreenState extends State<ContactScreen> {
                     child: Card(
                       child: ListTile(
                         leading: Text(
-                          contact.displayName[0],
+                          contact.fullName![0],
                           style: TextStyle(fontSize: 30),
                         ),
-                        title: Text(contact.displayName ?? ''),
-                        subtitle: Text('Company : ${contact.phones ?? ''}'),
+                        title: Text(contact.fullName![index]),
+                        subtitle: Text('Phone number: ${_getPhoneNumber(contact)}'),
                         onTap: () {},
                         splashColor: Colors.purple[50],
                         hoverColor: Colors.purple[100],
