@@ -1,8 +1,8 @@
-import 'package:contacts_service/contacts_service.dart';
-import 'package:flutter/material.dart';
-import 'package:permission_handler/permission_handler.dart';
+// ignore_for_file: sort_child_properties_last
 
-import 'main.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_contacts/flutter_contacts.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 var secreteNum;
 
@@ -16,9 +16,9 @@ class ContactScreen extends StatefulWidget {
 class _ContactScreenState extends State<ContactScreen> {
   List<Contact> contacts = [];
   bool isLoading = true;
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getContactPermission();
   }
@@ -32,7 +32,7 @@ class _ContactScreenState extends State<ContactScreen> {
   }
 
   void fetchContacts() async {
-    contacts = await ContactsService.getContacts();
+    contacts = await FlutterContacts.getContacts();
     setState(() {
       isLoading = false;
     });
@@ -40,59 +40,47 @@ class _ContactScreenState extends State<ContactScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (context, constraints) {
-      if (constraints.maxWidth < narrowScreenWidthThreshold) {
-        return Scaffold(
-          appBar: AppBar(
-            title: Text('Select your contact!'),
-          ),
-          body: isLoading
-              ? Center(child: CircularProgressIndicator())
-              : ListView.builder(
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onLongPress: () {
-                        setState(() {
-                          secreteNum = contacts[index].phones![0].value!;
-                        });
-                      },
-                      child: ListTile(
-                        leading: Container(
-                          // ignore: sort_child_properties_last
-                          child: Text(
-                            contacts[index].givenName![0],
-                            style: const TextStyle(
-                              fontSize: 20,
-                            ),
-                          ),
-                          height: 30,
-                          width: 30,
-                          color: Theme.of(context).colorScheme.primaryContainer,
-                        ),
-                        title: Text(contacts[index].displayName.toString()),
-                        subtitle: Text('Company :  ${contacts[index].company.toString()}'),
-                      ),
-                    );
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Select your contact!'),
+      ),
+      body: isLoading
+          ? Center(child: CircularProgressIndicator())
+          : ListView.builder(
+              itemBuilder: (context, index) {
+                final contact = contacts[index];
+                return GestureDetector(
+                  onLongPress: () {
+                    setState(() {
+                      secreteNum = contact.phones.first;
+                    });
                   },
-                  itemCount: contacts.length,
-                ),
-        );
-      } else {
-        return Scaffold(
-          appBar: AppBar(
-            title: Text('Select the contact!'),
-          ),
-          body: SafeArea(
-            bottom: false,
-            top: false,
-            child: Row(
-              children: <Widget>[
-                ListView(),
-              ],
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    child: Card(
+                      child: ListTile(
+                        leading: Text(
+                          contact.displayName[0],
+                          style: TextStyle(fontSize: 30),
+                        ),
+                        title: Text(contact.displayName ?? ''),
+                        subtitle: Text('Company : ${contact.phones ?? ''}'),
+                        onTap: () {},
+                        splashColor: Colors.purple[50],
+                        hoverColor: Colors.purple[100],
+                        enabled: true,
+                        selected: true,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                      ),
+                      elevation: 20,
+                      shadowColor: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                    ),
+                  ),
+                );
+              },
+              itemCount: contacts.length,
             ),
-          ),
-        );
-      }
-    });
+    );
   }
 }
